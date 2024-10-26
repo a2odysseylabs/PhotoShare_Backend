@@ -83,7 +83,7 @@ app.get('/api/event/:eventId/gallery/:galleryId', async (req, res) => {
 app.get('/api/event/:uniqueID', async (req, res) => {
   try {
     const collection = db.collection('EventInfo');
-    const event = await collection.findOne({ unique_id: new ObjectId(req.params.uniqueID) });
+    const event = await collection.findOne({ unique_id: req.params.uniqueID });
 
     if (event) {
       // Check if generatedImages exists for each galleryItem, if not, default to an empty array
