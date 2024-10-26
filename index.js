@@ -59,31 +59,31 @@ app.get('/api/event/:eventId/gallery/:galleryId', async (req, res) => {
 
 
 // API to fetch all events with specific fields
-app.get('/api/events', async (req, res) => {
+// app.get('/api/events', async (req, res) => {
+//   try {
+//     const collection = db.collection('EventInfo');
+//     const events = await collection.find({}).toArray();
+
+//     const filteredEvents = events.map((event) => ({
+//       _id: event._id,
+//       event_name: event.event_name,
+//       event_date: event.event_date,
+//       promptTitle: event.promptTitle,
+//     }));
+
+//     res.json(filteredEvents);
+//   } catch (error) {
+//     console.error('Error fetching events:', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
+
+
+// API to fetch specific event by uniqueID with gallery image URLs
+app.get('/api/event/:uniqueID', async (req, res) => {
   try {
     const collection = db.collection('EventInfo');
-    const events = await collection.find({}).toArray();
-
-    const filteredEvents = events.map((event) => ({
-      _id: event._id,
-      event_name: event.event_name,
-      event_date: event.event_date,
-      promptTitle: event.promptTitle,
-    }));
-
-    res.json(filteredEvents);
-  } catch (error) {
-    console.error('Error fetching events:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-
-// API to fetch specific event by eventId with gallery image URLs
-app.get('/api/event/:eventId', async (req, res) => {
-  try {
-    const collection = db.collection('EventInfo');
-    const event = await collection.findOne({ _id: new ObjectId(req.params.eventId) });
+    const event = await collection.findOne({ unique_id: new ObjectId(req.params.uniqueID) });
 
     if (event) {
       // Check if generatedImages exists for each galleryItem, if not, default to an empty array
@@ -92,7 +92,7 @@ app.get('/api/event/:eventId', async (req, res) => {
       });
 
       res.json({
-        _id: event._id,
+        unique_id: event.unique_id,
         event_name: event.event_name,
         event_date: event.event_date,
         promptTitle: event.promptTitle,
